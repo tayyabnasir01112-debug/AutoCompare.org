@@ -5,3 +5,4 @@ integrations = ["web_scraper:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["gitFull", "playwright-driver", "xorg.libxcb", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXfixes", "nss", "nspr", "dbus", "atk", "cups", "libxkbcommon", "at-spi2-atk", "mesa", "cairo", "pango", "alsa-lib"]
