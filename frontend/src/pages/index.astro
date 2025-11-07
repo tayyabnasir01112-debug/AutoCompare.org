@@ -13,16 +13,23 @@ const posts = (await getCollection('blog')).sort(
 let priceData = {};
 try {
         const fs = await import('fs/promises');
-        const fileContent = await fs.readFile('./frontend/public/data/prices.json', 'utf-8');
+        const path = await import('path');
+        const { fileURLToPath } = await import('url');
+        
+        // Calculate path relative to this file's location
+        // This file is in: frontend/src/pages/index.astro
+        // Public folder is at: frontend/public/
+        const currentFile = fileURLToPath(import.meta.url);
+        const pagesDir = path.dirname(currentFile);
+        const srcDir = path.dirname(pagesDir);
+        const frontendDir = path.dirname(srcDir);
+        const pricesPath = path.join(frontendDir, 'public', 'data', 'prices.json');
+        
+        const fileContent = await fs.readFile(pricesPath, 'utf-8');
         priceData = JSON.parse(fileContent);
 } catch (error) {
-        try {
-                const fs = await import('fs/promises');
-                const fileContent = await fs.readFile('./public/data/prices.json', 'utf-8');
-                priceData = JSON.parse(fileContent);
-        } catch (error2) {
-                console.log('Price data not available yet');
-        }
+        // Price data not available - this is OK for initial setup
+        console.log('Price data not available yet (this is normal on first run):', error.message);
 }
 
 const priceItems = Object.entries(priceData);

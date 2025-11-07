@@ -1,0 +1,33 @@
+{
+  "name": "autocompare-org",
+  "version": "1.0.0",
+  "description": "AutoCompare.org - Automated Price Comparison Website",
+  "type": "module",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "scraper": "python backend/scraper.py",
+    "test:scraper": "python backend/test-scraper.py",
+    "test:frontend": "node test-frontend.js",
+    "test": "npm run test:scraper && npm run test:frontend",
+    "validate": "python validate-setup.py",
+    "setup:frontend": "cd frontend && npm install",
+    "setup:backend": "pip install -r requirements.txt || pip install playwright aiofiles",
+    "setup": "npm run setup:frontend && npm run setup:backend",
+    "postinstall": "cd frontend && npm install"
+  },
+  "keywords": [
+    "price-comparison",
+    "scraper",
+    "astro",
+    "playwright"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
+

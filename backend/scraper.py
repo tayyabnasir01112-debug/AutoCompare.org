@@ -5,6 +5,10 @@ from playwright.async_api import async_playwright
 from datetime import datetime
 from pathlib import Path
 
+# Get the directory where this script is located
+SCRIPT_DIR = Path(__file__).parent.absolute()
+PROJECT_ROOT = SCRIPT_DIR.parent.absolute()
+
 async def scrape_site(playwright, name, site):
     """
     Scrape a single site based on configuration.
@@ -68,16 +72,20 @@ async def scrape_site(playwright, name, site):
 async def main():
     """Main scraper function that processes all configured sites."""
     
-    # Ensure directories exist
-    Path('backend/configs').mkdir(parents=True, exist_ok=True)
-    Path('backend/data').mkdir(parents=True, exist_ok=True)
-    Path('frontend/public/data').mkdir(parents=True, exist_ok=True)
+    # Ensure directories exist (using absolute paths)
+    config_dir = PROJECT_ROOT / 'backend' / 'configs'
+    data_dir = PROJECT_ROOT / 'backend' / 'data'
+    frontend_data_dir = PROJECT_ROOT / 'frontend' / 'public' / 'data'
+    
+    config_dir.mkdir(parents=True, exist_ok=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    frontend_data_dir.mkdir(parents=True, exist_ok=True)
     
     # Load site configurations
-    config_file = 'backend/configs/sites.json'
+    config_file = config_dir / 'sites.json'
     
     try:
-        async with aiofiles.open(config_file, 'r') as f:
+        async with aiofiles.open(str(config_file), 'r') as f:
             sites = json.loads(await f.read())
     except FileNotFoundError:
         print(f"Configuration file not found: {config_file}")
@@ -106,15 +114,16 @@ async def main():
             await asyncio.sleep(1)
     
     # Save results to backend/data
-    output_file = 'backend/data/prices.json'
+    output_file = data_dir / 'prices.json'
+    frontend_output = frontend_data_dir / 'prices.json'
+    
     json_content = json.dumps(results, indent=2)
     
-    async with aiofiles.open(output_file, 'w') as f:
+    async with aiofiles.open(str(output_file), 'w') as f:
         await f.write(json_content)
     
     # Also copy to frontend/public/data for static site access
-    frontend_output = 'frontend/public/data/prices.json'
-    async with aiofiles.open(frontend_output, 'w') as f:
+    async with aiofiles.open(str(frontend_output), 'w') as f:
         await f.write(json_content)
     
     print(f"\nScraping complete!")

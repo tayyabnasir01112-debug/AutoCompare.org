@@ -2,23 +2,23 @@
   "example_product_1": {
     "site": "example_product_1",
     "url": "https://www.example.com/product/123",
-    "scraped_at": "2025-11-07T12:00:00",
+    "scraped_at": "2025-11-07T23:03:46.815620",
     "success": true,
     "data": {
-      "title": "Premium Wireless Headphones",
-      "price": "$199.99",
-      "description": "High-quality wireless headphones with noise cancellation"
+      "title": "Example Domain",
+      "price": null,
+      "description": null
     }
   },
   "example_product_2": {
     "site": "example_product_2",
     "url": "https://www.example.com/product/456",
-    "scraped_at": "2025-11-07T12:00:00",
+    "scraped_at": "2025-11-07T23:03:52.707254",
     "success": true,
     "data": {
-      "title": "Smart Watch Series 5",
-      "price": "$399.99",
-      "description": "Latest smart watch with health tracking features"
+      "title": "Example Domain",
+      "price": null,
+      "description": null
     }
   }
 }

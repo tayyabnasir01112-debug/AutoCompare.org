@@ -1,5 +1,7 @@
 # AutoCompare.org - Automated Price Comparison Website
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR_SITE_ID/deploy-status)](https://app.netlify.com/sites/YOUR_SITE_NAME/deploys)
+
 **AutoCompare.org** is a fully automated price comparison platform with integrated blog functionality. Built with Astro for blazing-fast performance and Python + Playwright for universal web scraping.
 
 ## Features
