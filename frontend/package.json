@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.10",
@@ -14,5 +15,8 @@
     "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.15.4",
     "sharp": "^0.34.3"
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.1"
   }
 }
