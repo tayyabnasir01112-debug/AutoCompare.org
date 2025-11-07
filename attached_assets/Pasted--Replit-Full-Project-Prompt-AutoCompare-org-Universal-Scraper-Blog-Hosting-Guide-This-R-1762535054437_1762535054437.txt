@@ -1,0 +1,246 @@
+# 🧠 Replit Full Project Prompt — AutoCompare.org (Universal Scraper + Blog + Hosting Guide)
+
+This Replit prompt sets up **AutoCompare.org**, a zero-cost, fully automated price comparison + blog website with:
+
+* **Astro** frontend (fast, SEO-optimized, markdown-first)
+* **Universal Playwright Scraper System** (multi-site JSON config)
+* **GitHub Actions automation** for daily scraping & rebuild
+* **Netlify** free hosting + domain connection
+* **Comprehensive README** with Cursor/AI instructions
+
+---
+
+## 🚀 Replit Prompt (Paste This Into Replit Shell)
+
+````bash
+echo "Setting up AutoCompare.org Project..."
+
+# 1. Create project structure
+mkdir -p autocompare-org/{frontend,backend/configs,backend/data,.github/workflows}
+cd autocompare-org
+
+# 2. Initialize Git + Node + Python
+git init
+echo "# AutoCompare.org" > README.md
+npm init -y
+python3 -m venv venv
+source venv/bin/activate
+pip install playwright aiofiles
+playwright install chromium
+
+# 3. Create Astro frontend
+npm create astro@latest frontend -- --template blog
+
+# 4. Add Netlify configuration
+echo '[build]\n  publish = "frontend/dist"\n  command = "npm run build --prefix frontend"' > netlify.toml
+
+# 5. Setup backend scraper script
+cat << 'PYCODE' > backend/scraper.py
+import asyncio, json, aiofiles
+from playwright.async_api import async_playwright
+
+async def scrape_site(playwright, site):
+    browser = await playwright.chromium.launch(headless=True)
+    page = await browser.new_page()
+    await page.goto(site['url'])
+    data = {}
+    for key, selector in site['selectors'].items():
+        try:
+            element = await page.query_selector(selector)
+            data[key] = (await element.text_content()).strip() if element else None
+        except Exception as e:
+            data[key] = None
+    await browser.close()
+    return data
+
+async def main():
+    async with aiofiles.open('backend/configs/sites.json', 'r') as f:
+        sites = json.loads(await f.read())
+
+    async with async_playwright() as p:
+        results = {}
+        for name, site in sites.items():
+            results[name] = await scrape_site(p, site)
+
+    async with aiofiles.open('backend/data/prices.json', 'w') as f:
+        await f.write(json.dumps(results, indent=2))
+
+if __name__ == '__main__':
+    asyncio.run(main())
+PYCODE
+
+# 6. Example site configuration
+cat << 'JSONCONF' > backend/configs/sites.json
+{
+  "amazon": {
+    "url": "https://www.amazon.com/dp/B0CXYZ123",
+    "selectors": {
+      "title": "#productTitle",
+      "price": ".a-price-whole"
+    }
+  },
+  "walmart": {
+    "url": "https://www.walmart.com/ip/12345",
+    "selectors": {
+      "title": "h1",
+      "price": "span.price-characteristic"
+    }
+  }
+}
+JSONCONF
+
+# 7. Create GitHub Actions workflow
+cat << 'YAML' > .github/workflows/scrape.yml
+name: Daily Scraper
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright aiofiles
+          playwright install chromium
+
+      - name: Run scraper
+        run: python backend/scraper.py
+
+      - name: Commit and push data
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add backend/data/prices.json
+          git commit -m 'Auto-update scraped data'
+          git push
+YAML
+
+# 8. Create .env.example
+cat << 'ENV' > .env.example
+NETLIFY_SITE_ID="your-site-id"
+GITHUB_TOKEN="your-github-token"
+ENV
+
+# 9. Create README for Cursor/AI assistance
+cat << 'DOC' > README.md
+# 🧭 AutoCompare.org — Technical Setup Guide
+
+**Goal:** Build a zero-cost automated price comparison site with blog + daily scraping automation.
+
+---
+
+## 📦 Stack Overview
+- **Frontend:** Astro (static, SEO-optimized)
+- **Scraper:** Python + Playwright
+- **Automation:** GitHub Actions (daily CRON)
+- **Hosting:** Netlify (free tier)
+
+---
+
+## 🚀 Setup Instructions
+
+### 1️⃣ Local Setup (Replit or Cursor)
+1. Clone repo or open in Replit.
+2. Run the setup commands above.
+3. Modify `backend/configs/sites.json` to add more sites.
+4. Test scraper locally:
+   ```bash
+   python backend/scraper.py
+````
+
+5. Check output in `backend/data/prices.json`.
+
+### 2️⃣ Blog Content Management
+
+* Add blog posts as markdown files inside `frontend/src/content/blog/`.
+* Each post should include frontmatter like:
+
+  ```md
+  ---
+  title: "Top Laptops to Compare in 2025"
+  pubDate: "2025-11-07"
+  ---
+  Content here...
+  ```
+
+### 3️⃣ Hosting on Netlify
+
+1. Connect repo to Netlify.
+2. Build command: `npm run build --prefix frontend`
+3. Publish directory: `frontend/dist`
+4. Add custom domain: **AutoCompare.org**
+5. HTTPS auto-managed by Netlify.
+
+### 4️⃣ GitHub Action for Daily Automation
+
+* Edit `.github/workflows/scrape.yml` if you want to adjust timing.
+* It scrapes data every midnight UTC and commits results.
+
+### 5️⃣ Expanding the Scraper
+
+To add new websites:
+
+1. Duplicate a config entry in `sites.json`.
+2. Change the URL + selectors.
+3. Commit and push — automation will handle the rest.
+
+### 6️⃣ Optional Enhancements
+
+* Add a **frontend UI** to display live comparison tables from `data/prices.json`.
+* Add **search bar**, **category filters**, or **affiliate links** for monetization.
+* Integrate **Markdown blog SEO keywords** for organic growth.
+
+### 7️⃣ Deploy Verification
+
+After first deployment:
+
+* Visit site at `https://autocompare.org`.
+* Ensure updated data appears daily.
+
+### ✅ Summary
+
+This setup ensures:
+
+* Fully automated price scraping (Playwright)
+* Blog publishing via Markdown (Astro)
+* Free hosting (Netlify)
+* Daily automation (GitHub Actions)
+* SEO-friendly foundation for AdSense monetization.
+
+---
+
+💡 **Next Step:** Push repo to GitHub → Connect to Netlify → Monitor traffic.
+DOC
+
+# 10. Complete
+
+cd ..
+echo "✅ AutoCompare.org setup files created. Ready for Replit import."
+
+```
+
+---
+
+## 💡 How to Use This Prompt
+- Copy the full prompt into Replit Shell.
+- It auto-generates the project, with scraper + frontend + automation.
+- Once done, link to GitHub → Netlify.
+- Then update `sites.json` with your target URLs and selectors.
+
+---
+
+**End of Replit Setup Prompt for AutoCompare.org**
+
+```
