@@ -1,0 +1,18 @@
+{
+  "example_product_1": {
+    "url": "https://www.example.com/product/123",
+    "selectors": {
+      "title": "h1",
+      "price": ".price",
+      "description": ".description"
+    }
+  },
+  "example_product_2": {
+    "url": "https://www.example.com/product/456",
+    "selectors": {
+      "title": "h1",
+      "price": ".price",
+      "description": ".description"
+    }
+  }
+}
