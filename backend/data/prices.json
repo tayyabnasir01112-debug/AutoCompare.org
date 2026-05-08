@@ -2,7 +2,7 @@
   "example_product_1": {
     "site": "example_product_1",
     "url": "https://www.example.com/product/123",
-    "scraped_at": "2026-05-07T01:29:00.994746",
+    "scraped_at": "2026-05-08T01:45:25.068734",
     "success": true,
     "data": {
       "title": "Example Domain",
@@ -13,7 +13,7 @@
   "example_product_2": {
     "site": "example_product_2",
     "url": "https://www.example.com/product/456",
-    "scraped_at": "2026-05-07T01:29:04.227826",
+    "scraped_at": "2026-05-08T01:45:28.253683",
     "success": true,
     "data": {
       "title": "Example Domain",
