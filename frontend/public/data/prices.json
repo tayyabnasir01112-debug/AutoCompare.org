@@ -2,10 +2,10 @@
   "example_product_1": {
     "site": "example_product_1",
     "url": "https://www.example.com/product/123",
-    "scraped_at": "2026-09-28T02:07:51.417350",
+    "scraped_at": "2026-09-29T02:54:02.900096",
     "success": true,
     "data": {
-      "title": "Example Domain",
+      "title": null,
       "price": null,
       "description": null
     }
@@ -13,10 +13,10 @@
   "example_product_2": {
     "site": "example_product_2",
     "url": "https://www.example.com/product/456",
-    "scraped_at": "2026-09-28T02:07:54.600729",
+    "scraped_at": "2026-09-29T02:54:06.090093",
     "success": true,
     "data": {
-      "title": "Example Domain",
+      "title": null,
       "price": null,
       "description": null
     }
